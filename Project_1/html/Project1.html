@@ -1,0 +1,400 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Project1</title><meta name="generator" content="MATLAB 8.6"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-12"><meta name="DC.source" content="Project1.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput">clear;close <span class="string">all</span>;clc;
+
+
+freq=8000;
+Ts=1/freq;
+ws=2*pi*freq;fc=2000;bw=2*pi*fc;w0=bw;
+w1=0:1:2*bw ;
+n=1:length(w1);
+x(n)=1;
+l=1;
+fOrder = 1;
+
+
+
+i = true;
+<span class="keyword">while</span>(i)
+    S=0;
+<span class="keyword">for</span>  w=0:1:bw
+
+      s=1i*w/w0;
+
+    H = butterWorth(fOrder,w,w0);
+
+
+     S=S+(abs(H))^2;
+
+<span class="keyword">end</span>
+
+
+
+arr=[-6 -5 -4 -3 -2 -1 1 2 3 4 5 6 ];
+
+<span class="comment">%  arr = -6:6;</span>
+Noise=0;
+
+
+<span class="keyword">for</span>  w=0:1:bw
+N =0;
+
+
+
+
+     <span class="keyword">for</span>  n=1:10
+
+          k=w+arr(n)*ws;
+
+         s=1i*k/w0;
+         H = butterWorth(fOrder,k,w0);
+
+          N=N+H;
+
+     <span class="keyword">end</span>
+
+
+      Noise=Noise+(abs(N))^2;
+
+ <span class="keyword">end</span>
+
+
+
+ SNR=10*log10(S/Noise);
+ <span class="keyword">if</span> SNR &gt;= 60
+     i = false;
+ <span class="keyword">else</span>
+     fOrder = fOrder+1;
+ <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+fque = -10000:100:10000;
+w = 2*pi*fque;
+s=1i*w/w0;
+B = zeros(1,length(w));
+<span class="keyword">for</span> i= 1:length(w)
+    H = butterWorth(fOrder,w(i),w0);
+    B(i) = H;
+<span class="keyword">end</span>
+
+
+
+figure(1)
+subplot(2,1,1)
+plot(fque,abs(B));
+grid <span class="string">on</span>
+subplot(2,1,2)
+plot(fque,angle(B),<span class="string">'r'</span>);
+grid <span class="string">on</span>
+
+fque = -10000:100:10000;
+V = zeros(1,length(w));
+<span class="keyword">for</span> i= 1:length(w)
+
+    H =  butterWorth(fOrder,(w(i)-3*ws),w0)+ butterWorth(fOrder,(w(i)-2*ws),w0)+ butterWorth(fOrder,(w(i)-1*ws),w0)+ butterWorth(fOrder,w(i),w0)+ butterWorth(fOrder,(w(i)+1*ws),w0)+butterWorth(fOrder,(w(i)+2*ws),w0)+butterWorth(fOrder,(w(i)+3*ws),w0);
+    V(i) = H;
+<span class="keyword">end</span>
+
+figure(2)
+subplot(2,1,1)
+
+plot(fque,abs(V))
+ylim([0,1.5])
+grid <span class="string">on</span>
+subplot(2,1,2)
+plot(fque, angle(V))
+grid <span class="string">on</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+H_dsp = sawtooth(w/8000,0.5);
+H_dsp = (1-H_dsp)/2;
+figure(3)
+plot(fque,H_dsp)
+
+X4 = (H_dsp).*(V);
+subplot(2,1,1)
+plot(fque,abs(X4));
+grid <span class="string">on</span>;
+subplot(2,1,2)
+plot(fque,angle(X4));
+grid <span class="string">on</span>;
+
+S_H =sinc(fque/8000);
+
+X5 = X4.*S_H;
+figure(7)
+subplot(2,1,1)
+plot(fque,abs(X5));
+grid <span class="string">on</span>;
+subplot(2,1,2)
+plot(fque,angle(X5));
+grid <span class="string">on</span>;
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+SNR_Jitter = 60;
+T_signal = 1/2000;
+T_jitter = (0.194*T_signal)/sqrt(SNR_Jitter)
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+n_bits = 12;
+SNR_quant = 20*n_bits*log10(2)
+i =0
+freqq = -200:200;
+freqq = freqq.*100;
+H_r = zeros(1,length(freqq));
+<span class="keyword">for</span> i = (find(freqq == -2000):find(freqq == 2000))
+    H_r(i) = 1./sinc(freqq(i)/8000);
+<span class="keyword">end</span>
+figure(8)
+plot(freqq,abs(H_r));
+grid <span class="string">on</span>;
+X5 = [ones(1,100) X5 ones(1,100)];
+X6 = X5.*H_r;
+figure(9)
+subplot(2,1,1)
+plot(freqq,abs(X6));
+grid <span class="string">on</span>;
+subplot(2,1,2)
+plot(freqq,angle(X6));
+grid <span class="string">on</span>;
+</pre><pre class="codeoutput">
+T_jitter =
+
+   1.2523e-05
+
+
+SNR_quant =
+
+   72.2472
+
+
+i =
+
+     0
+
+</pre><img vspace="5" hspace="5" src="Project1_01.png" alt=""> <img vspace="5" hspace="5" src="Project1_02.png" alt=""> <img vspace="5" hspace="5" src="Project1_03.png" alt=""> <img vspace="5" hspace="5" src="Project1_04.png" alt=""> <img vspace="5" hspace="5" src="Project1_05.png" alt=""> <img vspace="5" hspace="5" src="Project1_06.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+clear;close all;clc;
+
+ 
+freq=8000;
+Ts=1/freq;
+ws=2*pi*freq;fc=2000;bw=2*pi*fc;w0=bw;    
+w1=0:1:2*bw ;
+n=1:length(w1);
+x(n)=1;
+l=1;
+fOrder = 1;
+
+
+
+i = true;
+while(i)
+    S=0;
+for  w=0:1:bw
+
+      s=1i*w/w0;
+ 
+    H = butterWorth(fOrder,w,w0);
+    
+     
+     S=S+(abs(H))^2;
+
+end
+
+ 
+
+arr=[-6 -5 -4 -3 -2 -1 1 2 3 4 5 6 ];
+
+%  arr = -6:6;
+Noise=0;
+  
+
+for  w=0:1:bw
+N =0;
+   
+
+      
+
+     for  n=1:10
+
+          k=w+arr(n)*ws;
+
+         s=1i*k/w0;
+         H = butterWorth(fOrder,k,w0);
+ 
+          N=N+H;
+
+     end
+
+    
+      Noise=Noise+(abs(N))^2;
+
+ end
+
+ 
+
+ SNR=10*log10(S/Noise);
+ if SNR >= 60
+     i = false;
+ else
+     fOrder = fOrder+1;
+ end
+end
+ 
+fque = -10000:100:10000;
+w = 2*pi*fque;
+s=1i*w/w0;
+B = zeros(1,length(w));
+for i= 1:length(w)
+    H = butterWorth(fOrder,w(i),w0);
+    B(i) = H;
+end
+
+
+
+figure(1)
+subplot(2,1,1)
+plot(fque,abs(B));
+grid on
+subplot(2,1,2)
+plot(fque,angle(B),'r');
+grid on
+
+fque = -10000:100:10000;
+V = zeros(1,length(w));
+for i= 1:length(w)
+    
+    H =  butterWorth(fOrder,(w(i)-3*ws),w0)+ butterWorth(fOrder,(w(i)-2*ws),w0)+ butterWorth(fOrder,(w(i)-1*ws),w0)+ butterWorth(fOrder,w(i),w0)+ butterWorth(fOrder,(w(i)+1*ws),w0)+butterWorth(fOrder,(w(i)+2*ws),w0)+butterWorth(fOrder,(w(i)+3*ws),w0);
+    V(i) = H;
+end
+
+figure(2)
+subplot(2,1,1)
+
+plot(fque,abs(V))
+ylim([0,1.5])
+grid on
+subplot(2,1,2)
+plot(fque, angle(V))
+grid on
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+H_dsp = sawtooth(w/8000,0.5);
+H_dsp = (1-H_dsp)/2;
+figure(3)
+plot(fque,H_dsp)
+
+X4 = (H_dsp).*(V);
+subplot(2,1,1)
+plot(fque,abs(X4));
+grid on;
+subplot(2,1,2)
+plot(fque,angle(X4));
+grid on;
+
+S_H =sinc(fque/8000);
+
+X5 = X4.*S_H;
+figure(7)
+subplot(2,1,1)
+plot(fque,abs(X5));
+grid on;
+subplot(2,1,2)
+plot(fque,angle(X5));
+grid on;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+SNR_Jitter = 60;
+T_signal = 1/2000;
+T_jitter = (0.194*T_signal)/sqrt(SNR_Jitter)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+n_bits = 12;
+SNR_quant = 20*n_bits*log10(2)
+i =0
+freqq = -200:200;
+freqq = freqq.*100;
+H_r = zeros(1,length(freqq));
+for i = (find(freqq == -2000):find(freqq == 2000))
+    H_r(i) = 1./sinc(freqq(i)/8000);
+end
+figure(8)
+plot(freqq,abs(H_r));
+grid on;
+X5 = [ones(1,100) X5 ones(1,100)];
+X6 = X5.*H_r;
+figure(9)
+subplot(2,1,1)
+plot(freqq,abs(X6));
+grid on;
+subplot(2,1,2)
+plot(freqq,angle(X6));
+grid on;
+
+##### SOURCE END #####
+--></body></html>
